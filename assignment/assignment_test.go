@@ -52,10 +52,9 @@ func TestAddUint32(t *testing.T) {
 	}
 }
 
-/*
 func TestCeilNumber(t *testing.T) {
 
-		Ceil the number within 0.25
+	/*	Ceil the number within 0.25
 		cases need to pass:
 			42.42 => 42.50
 			42 => 42
@@ -67,12 +66,23 @@ func TestCeilNumber(t *testing.T) {
 			42.75 => 42.75
 			42.76 => 43
 			42.99 => 43
-			43.13 => 43.25
+			43.13 => 43.25*/
 
-	point := CeilNumber(42.42)
+	testCases := []float64{
+		42.42, 42, 42.01, 42.24, 42.25,
+		42.26, 42.55, 42.75, 42.76, 42.99, 43.13,
+	}
 
-	assert.Equal(t, 42.50, point)
-}*/
+	expectedCases := []float64{
+		42.50, 42, 42.25, 42.25, 42.25,
+		42.50, 42.75, 42.75, 43, 43, 43.25,
+	}
+
+	for i, testCase := range testCases {
+		point := CeilNumber(testCase)
+		assert.Equal(t, expectedCases[i], point)
+	}
+}
 
 /*
 func TestAlphabetSoup(t *testing.T) {

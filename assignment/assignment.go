@@ -19,7 +19,9 @@ func AddUint32(x, y uint32) (uint32, bool) {
 }
 
 func CeilNumber(f float64) float64 {
-	return 0
+
+	ceilByQuarter := math.Ceil(f*4) / 4
+	return ceilByQuarter
 }
 
 func AlphabetSoup(s string) string {
