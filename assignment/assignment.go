@@ -1,7 +1,21 @@
 package assignment
 
+import (
+	"math"
+)
+
 func AddUint32(x, y uint32) (uint32, bool) {
-	return 0, false
+
+	overflowFlag := false
+	intResult := int(x) + int(y)
+	uintResult := x + y
+
+	// if there is overflow in the arithmetic
+	if intResult > math.MaxUint32 {
+		overflowFlag = true
+	}
+
+	return uintResult, overflowFlag
 }
 
 func CeilNumber(f float64) float64 {
