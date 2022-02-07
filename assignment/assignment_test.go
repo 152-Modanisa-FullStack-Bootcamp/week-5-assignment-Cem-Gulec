@@ -84,63 +84,99 @@ func TestCeilNumber(t *testing.T) {
 	}
 }
 
-/*
 func TestAlphabetSoup(t *testing.T) {
 
-		String with the letters in alphabetical order.
-		cases need to pass:
-		 	"hello" => "ehllo"
-			"" => ""
-			"h" => "h"
-			"ab" => "ab"
-			"ba" => "ab"
-			"bac" => "abc"
-			"cba" => "abc"
+	/*String with the letters in alphabetical order.
+	cases need to pass:
+	 	"hello" => "ehllo"
+		"" => ""
+		"h" => "h"
+		"ab" => "ab"
+		"ba" => "ab"
+		"bac" => "abc"
+		"cba" => "abc"*/
 
-	result := AlphabetSoup("hello")
+	testCases := []string{
+		"hello", "", "h",
+		"ab", "ba", "bac", "cba",
+	}
 
-	assert.Equal(t, "ehllo", result)
-}*/
+	expectedCases := []string{
+		"ehllo", "", "h",
+		"ab", "ab", "abc", "abc",
+	}
 
-/*
+	for i, testCase := range testCases {
+		result := AlphabetSoup(testCase)
+		assert.Equal(t, expectedCases[i], result)
+	}
+}
+
 func TestStringMask(t *testing.T) {
 
-		Replace after n(uint) character of string with '*' character.
-		cases need to pass:
-			"!mysecret*", 2 => "!m********"
-			"", n(any positive number) => "*"
-			"a", 1 => "*"
-			"string", 0 => "******"
-			"string", 3 => "str***"
-			"string", 5 => "strin*"
-			"string", 6 => "******"
-			"string", 7(bigger than len of "string") => "******"
-			"s*r*n*", 3 => "s*r***"
+	/*Replace after n(uint) character of string with '*' character.
+	cases need to pass:
+		"!mysecret*", 2 => "!m********"
+		"", n(any positive number) => "*"
+		"a", 1 => "*"
+		"string", 0 => "******"
+		"string", 3 => "str***"
+		"string", 5 => "strin*"
+		"string", 6 => "******"
+		"string", 7(bigger than len of "string") => "******"
+		"s*r*n*", 3 => "s*r***" */
 
-	result := StringMask("!mysecret*", 2)
+	testCases := []struct {
+		text string
+		num  uint
+	}{
+		{"!mysecret*", 2},
+		{"", 5},
+		{"a", 1},
+		{"string", 0},
+		{"string", 3},
+		{"string", 5},
+		{"string", 6},
+		{"string", 7},
+		{"s*r*n*", 3},
+	}
 
-	assert.Equal(t, "!m********", result)
-}*/
+	expectedCases := []string{
+		"!m********",
+		"*",
+		"*",
+		"******",
+		"str***",
+		"strin*",
+		"******",
+		"******",
+		"s*r***",
+	}
 
-/*
+	for i, testCase := range testCases {
+		result := StringMask(testCase.text, testCase.num)
+		assert.Equal(t, expectedCases[i], result)
+	}
+}
+
 func TestWordSplit(t *testing.T) {
 	words := "apple,bat,cat,goodbye,hello,yellow,why"
 
-		Your goal is to determine if the first element in the array can be split into two words,
-		where both words exist in the dictionary(words variable) that is provided in the second element of array.
+	/*Your goal is to determine if the first element in the array can be split into two words,
+	where both words exist in the dictionary(words variable) that is provided in the second element of array.
 
-		cases need to pass:
-			[2]string{"hellocat",words} => hello,cat
-			[2]string{"catbat",words} => cat,bat
-			[2]string{"yellowapple",words} => yellow,apple
-			[2]string{"",words} => not possible
-			[2]string{"notcat",words} => not possible
-			[2]string{"bootcamprocks!",words} => not possible
+	cases need to pass:
+		[2]string{"hellocat",words} => hello,cat
+		[2]string{"catbat",words} => cat,bat
+		[2]string{"yellowapple",words} => yellow,apple
+		[2]string{"",words} => not possible
+		[2]string{"notcat",words} => not possible
+		[2]string{"bootcamprocks!",words} => not possible*/
 
 	result := WordSplit([2]string{"hellocat", words})
 
 	assert.Equal(t, "hello,cat", result)
-}*/
+}
 
 /*
 func TestVariadicSet(t *testing.T) {
