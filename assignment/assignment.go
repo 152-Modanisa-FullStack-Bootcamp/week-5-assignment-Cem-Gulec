@@ -32,8 +32,9 @@ func AlphabetSoup(s string) string {
 	finalString := ""
 	charCount := make(map[string]int)
 
-	// collect string counts
+	// collect char counts from string
 	for _, v := range s {
+		// if char does not exist before
 		if charCount[string(v)] == 0 {
 			charCount[string(v)] = 1
 		} else {
@@ -52,7 +53,7 @@ func AlphabetSoup(s string) string {
 
 	// construct final string to be returned
 	for _, k := range keys {
-		// for every charCount there is, append it
+		// append every char multiplied by its charcount
 		for i := 0; i < charCount[k]; i++ {
 			finalString += k
 		}
@@ -76,13 +77,17 @@ func StringMask(s string, n uint) string {
 		return strings.Repeat("*", strLen)
 	}
 
+	// second half of the string from nth character
 	secondHalf := s[n:]
 	secondHalfLen := len(secondHalf)
 
-	// any char but new line
+	// using regex to find any character but new line
 	re := regexp.MustCompile(`[\s\S]*`)
+
+	// replacing them with * character
 	secondHalf = re.ReplaceAllString(secondHalf, strings.Repeat("*", secondHalfLen))
 
+	// appending them to each other for constructing final string
 	resultingStr := s[:n] + secondHalf
 
 	return resultingStr
@@ -90,12 +95,12 @@ func StringMask(s string, n uint) string {
 
 func WordSplit(arr [2]string) string {
 
-	words := arr[1]
-	doesWordExist := make(map[string]bool)
-	words_ := strings.Split(words, ",")
-	testStr := arr[0]
-	tempStr := ""   // a string to load and erase found words
-	resultStr := "" // a string to collect each word found
+	words := arr[1]                        // words that will be used for comparison
+	doesWordExist := make(map[string]bool) // hashmap to check whether word already collected
+	words_ := strings.Split(words, ",")    // splitted version of words string
+	testStr := arr[0]                      // given string at the test case
+	tempStr := ""                          // a string to load and erase found words
+	resultStr := ""                        // a string to collect each word found
 
 	// collect words and assign boolean accordingly
 	for _, word := range words_ {
@@ -110,19 +115,26 @@ func WordSplit(arr [2]string) string {
 		tempStr += string(letter)
 
 		// if there is a match occurred
+		// append it to resultStr
 		if _, ok := doesWordExist[tempStr]; ok {
 			resultStr += tempStr + ","
 			tempStr = ""
 		}
 	}
 
+	// if there is no matching
 	if len(resultStr) == 0 {
 		return "not possible"
 	} else if len(resultStr)-2 != len(testStr) {
+		// example case where this may happen:
+		// words: cat bat ....
+		// string: catbatt
+		// it will not be seperated into exactly two but there will be one letter left unmatched
 		return "not possible"
 	}
 
 	// to get rid of comma at the end
+	// in this case we seperated string into exactly two
 	return resultStr[:len(resultStr)-1]
 }
 
@@ -132,18 +144,21 @@ func VariadicSet(i ...interface{}) []interface{} {
 TestLoop:
 	for _, testElement := range i {
 
+		// initially start by appending first element
 		if len(finalInterface) == 0 {
 			finalInterface = append(finalInterface, testElement)
 			continue
 		}
 
 		// checking whether there is any duplicate
-		// in the interface that will be returned
+		// if there is, continue from next element
 		for _, setElement := range finalInterface {
 			if setElement == testElement {
 				continue TestLoop
 			}
 		}
+
+		// since there is no duplicate of the element, append it
 		finalInterface = append(finalInterface, testElement)
 	}
 
