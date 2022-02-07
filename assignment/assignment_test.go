@@ -197,19 +197,32 @@ func TestWordSplit(t *testing.T) {
 	}
 }
 
-/*
 func TestVariadicSet(t *testing.T) {
 
-		FINAL BOSS ALERT :)
-		Tip: Learn and apply golang variadic functions(search engine -> "golang variadic function" -> WOW You can really dance! )
+	/*FINAL BOSS ALERT :)
+	Tip: Learn and apply golang variadic functions(search engine -> "golang variadic function" -> WOW You can really dance! )
 
-		Convert inputs to set(no duplicate element)
-		cases need to pass:
-			4,2,5,4,2,4 => []interface{4,2,5}
-			"bootcamp","rocks!","really","rocks! => []interface{"bootcamp","rocks!","really"}
-			1,uint32(1),"first",2,uint32(2),"second",1,uint32(2),"first" => []interface{1,uint32(1),"first",2,uint32(2),"second"}
+	Convert inputs to set(no duplicate element)
+	cases need to pass:
+		4,2,5,4,2,4 => []interface{4,2,5}
+		"bootcamp","rocks!","really","rocks! => []interface{"bootcamp","rocks!","really"}
+		1,uint32(1),"first",2,uint32(2),"second",1,uint32(2),"first" => []interface{1,uint32(1),"first",2,uint32(2),"second"}
+	*/
 
-	set := VariadicSet(4, 2, 5, 4, 2, 4)
+	testCases := [][]interface{}{
+		{4, 2, 5, 4, 2, 4},
+		{"bootcamp", "rocks!", "really", "rocks!"},
+		{1, uint32(1), "first", 2, uint32(2), "second", 1, uint32(2), "first"},
+	}
 
-	assert.Equal(t, []interface{}{4, 2, 5}, set)
-}*/
+	expectedCases := [][]interface{}{
+		{4, 2, 5},
+		{"bootcamp", "rocks!", "really"},
+		{1, uint32(1), "first", 2, uint32(2), "second"},
+	}
+
+	for i, testCase := range testCases {
+		set := VariadicSet(testCase...)
+		assert.Equal(t, expectedCases[i], set)
+	}
+}

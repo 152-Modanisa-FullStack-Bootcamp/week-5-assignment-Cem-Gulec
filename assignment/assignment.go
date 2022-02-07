@@ -127,5 +127,25 @@ func WordSplit(arr [2]string) string {
 }
 
 func VariadicSet(i ...interface{}) []interface{} {
-	return nil
+	finalInterface := make([]interface{}, 0)
+
+TestLoop:
+	for _, testElement := range i {
+
+		if len(finalInterface) == 0 {
+			finalInterface = append(finalInterface, testElement)
+			continue
+		}
+
+		// checking whether there is any duplicate
+		// in the interface that will be returned
+		for _, setElement := range finalInterface {
+			if setElement == testElement {
+				continue TestLoop
+			}
+		}
+		finalInterface = append(finalInterface, testElement)
+	}
+
+	return finalInterface
 }
