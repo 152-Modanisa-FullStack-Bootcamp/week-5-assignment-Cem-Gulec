@@ -32,6 +32,7 @@ func AlphabetSoup(s string) string {
 	finalString := ""
 	charCount := make(map[string]int)
 
+	// collect string counts
 	for _, v := range s {
 		if charCount[string(v)] == 0 {
 			charCount[string(v)] = 1
@@ -88,7 +89,41 @@ func StringMask(s string, n uint) string {
 }
 
 func WordSplit(arr [2]string) string {
-	return ""
+
+	words := arr[1]
+	doesWordExist := make(map[string]bool)
+	words_ := strings.Split(words, ",")
+	testStr := arr[0]
+	tempStr := ""   // a string to load and erase found words
+	resultStr := "" // a string to collect each word found
+
+	// collect words and assign boolean accordingly
+	for _, word := range words_ {
+		if !doesWordExist[word] {
+			doesWordExist[word] = true
+		}
+	}
+
+	// iterate over test string to see
+	// whether there is a match or not
+	for _, letter := range testStr {
+		tempStr += string(letter)
+
+		// if there is a match occurred
+		if _, ok := doesWordExist[tempStr]; ok {
+			resultStr += tempStr + ","
+			tempStr = ""
+		}
+	}
+
+	if len(resultStr) == 0 {
+		return "not possible"
+	} else if len(resultStr)-2 != len(testStr) {
+		return "not possible"
+	}
+
+	// to get rid of comma at the end
+	return resultStr[:len(resultStr)-1]
 }
 
 func VariadicSet(i ...interface{}) []interface{} {
