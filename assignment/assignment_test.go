@@ -20,35 +20,45 @@ func TestAddUint32(t *testing.T) {
 			4294967290, 10 => 4, true
 	*/
 	testCases := []struct {
-		x uint32
-		y uint32
-	}{
-		{math.MaxUint32, 1},
-		{1, 1},
-		{42, 2701},
-		{42, math.MaxUint32},
-		{4294967290, 5},
-		{4294967290, 6},
-		{4294967290, 10},
-	}
-
-	expectedCases := []struct {
-		result   uint32
+		x        uint32
+		y        uint32
+		want     uint32
 		overflow bool
 	}{
-		{0, true},
-		{2, false},
-		{2743, false},
-		{41, true},
-		{4294967295, false},
-		{0, true},
-		{4, true},
+		{
+			math.MaxUint32, 1,
+			0, true,
+		},
+		{
+			1, 1,
+			2, false,
+		},
+		{
+			42, 2701,
+			2743, false,
+		},
+		{
+			42, math.MaxUint32,
+			41, true,
+		},
+		{
+			4294967290, 5,
+			4294967295, false,
+		},
+		{
+			4294967290, 6,
+			0, true,
+		},
+		{
+			4294967290, 10,
+			4, true,
+		},
 	}
 
-	for i, testCase := range testCases {
+	for _, testCase := range testCases {
 		sum, overflow := AddUint32(testCase.x, testCase.y)
-		assert.Equal(t, expectedCases[i].result, sum)
-		assert.Equal(t, expectedCases[i].overflow, overflow)
+		assert.Equal(t, testCase.want, sum)
+		assert.Equal(t, testCase.overflow, overflow)
 	}
 }
 
@@ -68,19 +78,59 @@ func TestCeilNumber(t *testing.T) {
 			42.99 => 43
 			43.13 => 43.25*/
 
-	testCases := []float64{
-		42.42, 42, 42.01, 42.24, 42.25,
-		42.26, 42.55, 42.75, 42.76, 42.99, 43.13,
+	testCases := []struct {
+		value float64
+		want  float64
+	}{
+		{
+			42.42,
+			42.50,
+		},
+		{
+			42,
+			42,
+		},
+		{
+			42.01,
+			42.25,
+		},
+		{
+			42.24,
+			42.25,
+		},
+		{
+			42.25,
+			42.25,
+		},
+		{
+			42.26,
+			42.50,
+		},
+		{
+			42.55,
+			42.75,
+		},
+		{
+			42.75,
+			42.75,
+		},
+		{
+			42.76,
+			43,
+		},
+		{
+			42.99,
+			43,
+		},
+		{
+			43.13,
+			43.25,
+		},
 	}
 
-	expectedCases := []float64{
-		42.50, 42, 42.25, 42.25, 42.25,
-		42.50, 42.75, 42.75, 43, 43, 43.25,
-	}
-
-	for i, testCase := range testCases {
-		point := CeilNumber(testCase)
-		assert.Equal(t, expectedCases[i], point)
+	for _, testCase := range testCases {
+		point := CeilNumber(testCase.value)
+		assert.Equal(t, testCase.want, point)
 	}
 }
 
@@ -96,19 +146,43 @@ func TestAlphabetSoup(t *testing.T) {
 		"bac" => "abc"
 		"cba" => "abc"*/
 
-	testCases := []string{
-		"hello", "", "h",
-		"ab", "ba", "bac", "cba",
+	testCases := []struct {
+		text string
+		want string
+	}{
+		{
+			"hello",
+			"ehllo",
+		},
+		{
+			"",
+			"",
+		},
+		{
+			"h",
+			"h",
+		},
+		{
+			"ab",
+			"ab",
+		},
+		{
+			"ba",
+			"ab",
+		},
+		{
+			"bac",
+			"abc",
+		},
+		{
+			"cba",
+			"abc",
+		},
 	}
 
-	expectedCases := []string{
-		"ehllo", "", "h",
-		"ab", "ab", "abc", "abc",
-	}
-
-	for i, testCase := range testCases {
-		result := AlphabetSoup(testCase)
-		assert.Equal(t, expectedCases[i], result)
+	for _, testCase := range testCases {
+		result := AlphabetSoup(testCase.text)
+		assert.Equal(t, testCase.want, result)
 	}
 }
 
@@ -129,33 +203,49 @@ func TestStringMask(t *testing.T) {
 	testCases := []struct {
 		text string
 		num  uint
+		want string
 	}{
-		{"!mysecret*", 2},
-		{"", 5},
-		{"a", 1},
-		{"string", 0},
-		{"string", 3},
-		{"string", 5},
-		{"string", 6},
-		{"string", 7},
-		{"s*r*n*", 3},
+		{
+			"!mysecret*", 2,
+			"!m********",
+		},
+		{
+			"", 5,
+			"*",
+		},
+		{
+			"a", 1,
+			"*",
+		},
+		{
+			"string", 0,
+			"******",
+		},
+		{
+			"string", 3,
+			"str***",
+		},
+		{
+			"string", 5,
+			"strin*",
+		},
+		{
+			"string", 6,
+			"******",
+		},
+		{
+			"string", 7,
+			"******",
+		},
+		{
+			"s*r*n*", 3,
+			"s*r***",
+		},
 	}
 
-	expectedCases := []string{
-		"!m********",
-		"*",
-		"*",
-		"******",
-		"str***",
-		"strin*",
-		"******",
-		"******",
-		"s*r***",
-	}
-
-	for i, testCase := range testCases {
+	for _, testCase := range testCases {
 		result := StringMask(testCase.text, testCase.num)
-		assert.Equal(t, expectedCases[i], result)
+		assert.Equal(t, testCase.want, result)
 	}
 }
 
@@ -173,27 +263,39 @@ func TestWordSplit(t *testing.T) {
 
 	words := "apple,bat,cat,goodbye,hello,yellow,why"
 
-	testCases := [][2]string{
-		{"hellocat", words},
-		{"catbat", words},
-		{"yellowapple", words},
-		{"", words},
-		{"notcat", words},
-		{"bootcamprocks!", words},
+	testCases := []struct {
+		test [2]string
+		want string
+	}{
+		{
+			[2]string{"hellocat", words},
+			"hello,cat",
+		},
+		{
+			[2]string{"catbat", words},
+			"cat,bat",
+		},
+		{
+			[2]string{"yellowapple", words},
+			"yellow,apple",
+		},
+		{
+			[2]string{"", words},
+			"not possible",
+		},
+		{
+			[2]string{"notcat", words},
+			"not possible",
+		},
+		{
+			[2]string{"bootcamprocks!", words},
+			"not possible",
+		},
 	}
 
-	expectedCases := []string{
-		"hello,cat",
-		"cat,bat",
-		"yellow,apple",
-		"not possible",
-		"not possible",
-		"not possible",
-	}
-
-	for i, testCase := range testCases {
-		result := WordSplit(testCase)
-		assert.Equal(t, expectedCases[i], result)
+	for _, testCase := range testCases {
+		result := WordSplit(testCase.test)
+		assert.Equal(t, testCase.want, result)
 	}
 }
 
@@ -209,20 +311,26 @@ func TestVariadicSet(t *testing.T) {
 		1,uint32(1),"first",2,uint32(2),"second",1,uint32(2),"first" => []interface{1,uint32(1),"first",2,uint32(2),"second"}
 	*/
 
-	testCases := [][]interface{}{
-		{4, 2, 5, 4, 2, 4},
-		{"bootcamp", "rocks!", "really", "rocks!"},
-		{1, uint32(1), "first", 2, uint32(2), "second", 1, uint32(2), "first"},
+	testCases := []struct {
+		test []interface{}
+		want []interface{}
+	}{
+		{
+			[]interface{}{4, 2, 5, 4, 2, 4},
+			[]interface{}{4, 2, 5},
+		},
+		{
+			[]interface{}{"bootcamp", "rocks!", "really", "rocks!"},
+			[]interface{}{"bootcamp", "rocks!", "really"},
+		},
+		{
+			[]interface{}{1, uint32(1), "first", 2, uint32(2), "second", 1, uint32(2), "first"},
+			[]interface{}{1, uint32(1), "first", 2, uint32(2), "second"},
+		},
 	}
 
-	expectedCases := [][]interface{}{
-		{4, 2, 5},
-		{"bootcamp", "rocks!", "really"},
-		{1, uint32(1), "first", 2, uint32(2), "second"},
-	}
-
-	for i, testCase := range testCases {
-		set := VariadicSet(testCase...)
-		assert.Equal(t, expectedCases[i], set)
+	for _, testCase := range testCases {
+		set := VariadicSet(testCase.test...)
+		assert.Equal(t, testCase.want, set)
 	}
 }
